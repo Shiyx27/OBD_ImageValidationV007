@@ -1,0 +1,135 @@
+{
+  "model_info": {
+    "name": "EnsemblePackagingClassifier",
+    "version": "1.0.0",
+    "type": "image_classification",
+    "created": "2025-05-30",
+    "description": "Ensemble transfer learning model for packaging classification",
+    "accuracy": 89.55,
+    "framework": "tensorflow_keras"
+  },
+  "architecture": {
+    "type": "ensemble_transfer_learning",
+    "base_models": [
+      "EfficientNetB0",
+      "ResNet50",
+      "DenseNet121",
+      "MobileNetV2"
+    ],
+    "fusion": "meta_learner",
+    "total_parameters": 38659511,
+    "model_size_mb": 147.47
+  },
+  "dataset": {
+    "total_samples": 9428,
+    "classes": {
+      "count": 4,
+      "names": [
+        "Blurr_Dark_Random",
+        "Clear-samples",
+        "PrimaryPackage",
+        "SecondaryPackage"
+      ],
+      "weights": {
+        "Blurr_Dark_Random": 1.597,
+        "Clear-samples": 1.3,
+        "PrimaryPackage": 1.386,
+        "SecondaryPackage": 1.342
+      }
+    },
+    "split": {
+      "training": 7072,
+      "validation": 2356
+    }
+  },
+  "performance": {
+    "validation_accuracy": 89.55,
+    "per_class_accuracy": {
+      "Blurr_Dark_Random": 97.63,
+      "Clear-samples": 92.21,
+      "PrimaryPackage": 73.82,
+      "SecondaryPackage": 91.17
+    },
+    "precision_recall": {
+      "Blurr_Dark_Random": {
+        "precision": 94.74,
+        "recall": 97.63
+      },
+      "Clear-samples": {
+        "precision": 90.5,
+        "recall": 92.21
+      },
+      "PrimaryPackage": {
+        "precision": 81.76,
+        "recall": 73.82
+      },
+      "SecondaryPackage": {
+        "precision": 89.39,
+        "recall": 91.17
+      }
+    }
+  },
+  "preprocessing": {
+    "input_size": [
+      224,
+      224
+    ],
+    "channels": 3,
+    "normalization": "divide_by_255",
+    "color_space": "RGB",
+    "resize_method": "bilinear"
+  },
+  "deployment": {
+    "input_format": "RGB image array [224, 224, 3] normalized to [0,1]",
+    "output_format": "Probability array [4] with class predictions",
+    "prediction_example": {
+      "input_shape": [
+        1,
+        224,
+        224,
+        3
+      ],
+      "output_shape": [
+        1,
+        4
+      ],
+      "sample_output": [
+        0.1,
+        0.7,
+        0.15,
+        0.05
+      ]
+    }
+  },
+  "github_integration": {
+    "repository_structure": {
+      "model.json": "Model architecture and configuration",
+      "weights.bin": "Binary weights file",
+      "metadata.json": "This metadata file"
+    },
+    "appscript_usage": {
+      "load_model": "Use model.json to reconstruct architecture",
+      "load_weights": "Read weights.bin and apply to model",
+      "predict": "Preprocess image and run inference",
+      "postprocess": "Apply class mapping from metadata"
+    }
+  },
+  "api_specification": {
+    "input": {
+      "type": "image",
+      "format": [
+        "jpg",
+        "png",
+        "jpeg"
+      ],
+      "max_size": "10MB",
+      "dimensions": "any (will be resized to 224x224)"
+    },
+    "output": {
+      "prediction": "string (class name)",
+      "confidence": "float (0.0 to 1.0)",
+      "all_probabilities": "array of 4 floats",
+      "processing_time": "float (seconds)"
+    }
+  }
+}
